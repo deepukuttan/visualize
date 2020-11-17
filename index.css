@@ -1,0 +1,32 @@
+body{
+  background-image: url("body.jpg");
+  padding:0px;
+}
+.top{
+  background-image: url("galaxy.jpg");
+  color: white;
+  font-family: cursive;
+  padding-bottom: 8%;
+}
+.col-sm-4{
+  padding: 5%;
+  color:white;
+  font-family: cursive;
+  border: 1px solid black;
+  background-color:black;
+  opacity: .6;
+}
+.col-sm-4 ul{
+  padding:2%;
+}
+.col-sm-4:hover{
+    box-shadow: 2px 4px 6px #248CF3;
+}
+.container-fluid{
+  padding-top: 0px;
+}
+.footer{
+  color:#248CF3;
+  background-color: black;
+  opacity:.7;
+}
