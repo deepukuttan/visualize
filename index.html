@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Resume | Deepu Omanakuttan</title>
+    <!-- Chosen Palette: Slate Gray & Cool Blues -->
+    <!-- Application Structure Plan: The SPA is designed as a single-page, vertical-scrolling portfolio. This structure was chosen over a traditional resume layout to provide a modern, engaging user experience for recruiters. The flow is: Header -> Summary -> Interactive Timeline -> Interactive Skills Chart -> Projects -> Education/Certs -> Contact. A sticky navigation bar allows quick access to any section. Key interactions include: 1) A clickable career timeline where selecting a job dynamically updates a details pane, preventing information overload. 2) A skills section with buttons that filter a radar chart by category, offering a quick, visual assessment of capabilities. This architecture transforms a static document into an exploratory journey, allowing users to progressively discover information in a digestible and memorable way. -->
+    <!-- Visualization & Content Choices: 
+        - Professional Summary (Report Info) -> Goal: Inform -> Presentation: Prominent text block -> Interaction: None, serves as an introduction. Justification: Sets the stage and provides immediate context.
+        - Work Experience (Report Info) -> Goal: Show Change/Progression -> Viz/Presentation: Interactive vertical timeline (HTML/CSS/JS) with a dynamic content pane. -> Interaction: On-click event on a timeline item populates the details pane with that job's responsibilities. Justification: More engaging than a long, static list. It highlights career progression visually and allows users to drill down into details without being overwhelmed.
+        - Skills Table (Report Info) -> Goal: Organize & Compare -> Viz/Presentation: Interactive Radar Chart (Chart.js) with filter buttons. -> Interaction: User clicks a category button (e.g., 'Programming', 'Cloud') to dynamically update the chart with skills and self-assessed proficiency levels for that category. Justification: A radar chart provides a multi-dimensional, at-a-glance view of strengths, which is more impactful than a static table. The interaction makes the data exploration user-driven.
+        - Projects/Education/Certs (Report Info) -> Goal: Inform -> Presentation: Styled cards and lists (HTML/Tailwind). -> Interaction: Subtle hover effects. Justification: Clear, organized presentation for factual information.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .nav-link-active {
+            color: #2563eb; /* blue-600 */
+            font-weight: 700;
+        }
+        .timeline-item-active {
+             border-color: #2563eb !important; /* blue-600 */
+             background-color: #dbeafe !important; /* blue-100 */
+        }
+        .timeline-item-active h3 {
+            color: #1e40af; /* blue-800 */
+        }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <header class="bg-slate-50/80 backdrop-blur-lg sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold text-slate-800">Deepu Omanakuttan</a>
+            <div class="hidden md:flex space-x-8 font-medium">
+                <a href="#summary" class="nav-link hover:text-blue-600 transition-colors duration-300">Summary</a>
+                <a href="#experience" class="nav-link hover:text-blue-600 transition-colors duration-300">Experience</a>
+                <a href="#skills" class="nav-link hover:text-blue-600 transition-colors duration-300">Skills</a>
+                <a href="#projects" class="nav-link hover:text-blue-600 transition-colors duration-300">Projects</a>
+                <a href="#education" class="nav-link hover:text-blue-600 transition-colors duration-300">Education</a>
+            </div>
+             <a href="mailto:deepuomanakuttan1@gmail.com" class="hidden md:block bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300">Contact Me</a>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+
+        <section id="hero" class="text-center mb-20 md:mb-32">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 mb-4">Deepu Omanakuttan</h1>
+            <p class="text-xl md:text-2xl text-blue-600 font-medium mb-8">Software Engineer specializing in Backend Development & Cloud Automation</p>
+             <div class="flex justify-center items-center space-x-6 text-slate-500">
+                <div class="flex items-center space-x-2">
+                    <span class="font-bold text-2xl">&#9993;</span>
+                    <a href="mailto:deepuomanakuttan1@gmail.com" class="hover:text-blue-600">deepuomanakuttan1@gmail.com</a>
+                </div>
+                <div class="flex items-center space-x-2">
+                     <span class="font-bold text-2xl">&#9742;</span>
+                    <span>+91 6238034836</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                     <span class="font-bold text-2xl">&#128205;</span>
+                    <span>Alappuzha, India</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="summary" class="mb-20 md:mb-32 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 text-center">Professional Summary</h2>
+            <p class="max-w-4xl mx-auto text-center text-lg leading-relaxed">
+                This section provides a high-level overview of Deepu's professional background. It captures 6 years of experience in backend development, automation, and system support, highlighting a strong proficiency in UNIX environments and cloud technologies like AWS. It also introduces key accomplishments, including middleware creation, legacy system migrations, and innovative work with Gen AI.
+            </p>
+            <div class="mt-8 max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-slate-200">
+                <p class="text-lg text-slate-800 leading-relaxed">
+                    Results-driven software engineer with 6 years of experience in backend development, automation and system support. Adept across UNIX environments and cloud technologies including AWS. Recognized for building efficient middleware, leading legacy migrations, and pioneering Gen AI solutions using Amazon Bedrock and Nova LLM. Currently excelling at Amazon LLC, delivering scalable automation in high-impact support engineering.
+                </p>
+            </div>
+        </section>
+
+        <section id="experience" class="mb-20 md:mb-32 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 text-center">Career Timeline</h2>
+            <p class="max-w-4xl mx-auto text-center text-lg leading-relaxed mb-12">
+                Explore Deepu's career progression through this interactive timeline. Click on any role to see the detailed responsibilities and achievements associated with that position. This format visually separates distinct roles, allowing for a focused look at his contributions at Amazon and Tata Consultancy Services.
+            </p>
+            <div class="md:grid md:grid-cols-12 md:gap-12">
+                <div id="timeline-nav" class="md:col-span-4">
+                </div>
+                <div class="md:col-span-8 mt-8 md:mt-0">
+                    <div id="timeline-details" class="bg-white p-8 rounded-xl shadow-lg border border-slate-200 min-h-[300px] transition-all duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="mb-20 md:mb-32 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 text-center">Technical Skills</h2>
+            <p class="max-w-4xl mx-auto text-center text-lg leading-relaxed mb-12">
+                This section visualizes Deepu's technical proficiency. Use the buttons below to filter the skills by category. The radar chart will update to show his relative experience and strengths in areas like Programming, Cloud Technologies, Databases, and Systems Tools. This provides a quick, comparative view of his capabilities.
+            </p>
+            <div class="text-center mb-8 space-x-2" id="skill-filters">
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">
+                <div class="chart-container">
+                    <canvas id="skillsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="mb-20 md:mb-32 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 text-center">Key Projects & Initiatives</h2>
+             <p class="max-w-4xl mx-auto text-center text-lg leading-relaxed mb-12">
+                Here are some of the standout projects from Deepu's career. These examples showcase his ability to tackle diverse challenges, from pioneering Gen AI applications at Amazon to executing complex legacy migrations and exploring emerging technologies like blockchain at TCS.
+            </p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="font-bold text-xl text-blue-700 mb-2">Gen AI Automation Workflows</h3>
+                    <p class="text-slate-600 mb-4">Designed and implemented automation workflows to reduce manual overhead and improve support speed.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Amazon Bedrock</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Nova LLM</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Python</span>
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="font-bold text-xl text-blue-700 mb-2">FORTRAN to C Migration</h3>
+                    <p class="text-slate-600 mb-4">Successfully led and delivered a complex legacy system migration project, ensuring continuity and performance.</p>
+                     <div class="flex flex-wrap gap-2">
+                        <span class="bg-slate-200 text-slate-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">C</span>
+                        <span class="bg-slate-200 text-slate-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">FORTRAN</span>
+                         <span class="bg-slate-200 text-slate-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Python</span>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="font-bold text-xl text-blue-700 mb-2">C-PostgreSQL Middleware</h3>
+                    <p class="text-slate-600 mb-4">Built efficient middleware libraries connecting C applications to a PostgreSQL database, accelerating development cycles.</p>
+                     <div class="flex flex-wrap gap-2">
+                        <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">C</span>
+                        <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">PostgreSQL</span>
+                         <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">SQL</span>
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="font-bold text-xl text-blue-700 mb-2">Blockchain Flight Booking POC</h3>
+                    <p class="text-slate-600 mb-4">Developed a proof-of-concept for a decentralized flight booking system during an internship.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Ethereum</span>
+                        <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Angular</span>
+                         <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Node.js</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="education" class="scroll-mt-20">
+            <h2 class="text-3xl font-bold text-slate-800 mb-12 text-center">Education & Certifications</h2>
+             <p class="max-w-4xl mx-auto text-center text-lg leading-relaxed mb-12">
+                This final section outlines Deepu's formal academic qualifications and professional certifications, which form the foundation of his technical expertise.
+            </p>
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="font-bold text-xl text-slate-800 mb-4">Education</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="font-semibold text-blue-700">M.Tech – Instrumentation Technology</p>
+                            <p class="text-slate-600">Cochin University of Science and Technology, Kochi</p>
+                            <p class="text-sm text-slate-500">2017 – 2019</p>
+                        </div>
+                        <div class="border-t border-slate-200 my-2"></div>
+                        <div>
+                            <p class="font-semibold text-blue-700">B.Tech – Electronics & Instrumentation Engineering</p>
+                            <p class="text-slate-600">Mahatma Gandhi University, Kottayam</p>
+                            <p class="text-sm text-slate-500">2012 – 2016</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="font-bold text-xl text-slate-800 mb-4">Certifications</h3>
+                    <div class="space-y-4">
+                       <div>
+                            <p class="font-semibold text-blue-700">Google IT Automation with Python</p>
+                            <p class="text-slate-600">Professional Certificate</p>
+                            <p class="text-sm text-slate-500">Issued: Apr 2022</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-slate-300 mt-20 md:mt-32">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <h3 class="text-2xl font-bold text-white mb-4">Get In Touch</h3>
+            <p class="mb-6">Feel free to reach out for collaborations or opportunities.</p>
+            <a href="mailto:deepuomanakuttan1@gmail.com" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-300">Email Me</a>
+            <div class="mt-8 border-t border-slate-700 pt-6 text-sm">
+                <p>&copy; 2025 Deepu Omanakuttan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const experienceData = [
+                {
+                    id: 'amazon',
+                    role: 'Level 3 Support Engineer',
+                    company: 'Amazon LLC',
+                    location: 'Chennai, India',
+                    period: 'Dec 2022 – Present',
+                    details: [
+                        'Lead technical support for AWS infrastructure across global teams.',
+                        'Designed Gen AI–powered automation workflows using <strong>Amazon Bedrock</strong> and <strong>Nova LLM</strong>, reducing manual overhead and improving speed.',
+                        'Resolved complex production issues on EC2, S3, Lambda, CloudWatch, IAM, and more.',
+                        'Created diagnostic tools and log analysis scripts in Python and Bash.',
+                        'Partnered with engineering teams to propose architectural improvements.',
+                        'Authored internal documentation to streamline onboarding and incident response.',
+                    ]
+                },
+                {
+                    id: 'tcs_se',
+                    role: 'System Engineer',
+                    company: 'Tata Consultancy Services',
+                    location: 'Chennai, India',
+                    period: 'Jul 2019 – Jun 2023',
+                    details: [
+                        'Delivered successful FORTRAN-to-C migration project.',
+                        'Built C–PostgreSQL middleware libraries that accelerated development.',
+                        'Automated testing and reporting for C applications using Python tools.',
+                        'Designed DB procedures reducing client polling latency from hours to minutes.',
+                    ]
+                },
+                {
+                    id: 'tcs_intern',
+                    role: 'Blockchain Intern',
+                    company: 'Tata Consultancy Services',
+                    location: 'Trivandrum, KL',
+                    period: 'Apr 2019 – Jul 2019',
+                    details: [
+                        'Built blockchain-based flight booking POC using Ethereum, Angular & Node.js.',
+                    ]
+                }
+            ];
+
+            const skillsData = {
+                'Programming': { labels: ['Python', 'C', 'C++', 'Java', 'Go'], values: [9, 8, 7, 6, 5] },
+                'Cloud & Web': { labels: ['AWS', 'FastAPI', 'HTML', 'JavaScript', 'CSS'], values: [9, 7, 6, 6, 6] },
+                'Databases': { labels: ['PostgreSQL', 'SQL'], values: [8, 8] },
+                'Systems & Tools': { labels: ['Linux', 'Bash', 'Solaris', 'Git'], values: [9, 8, 7, 8] }
+            };
+
+            const timelineNavContainer = document.getElementById('timeline-nav');
+            const timelineDetailsContainer = document.getElementById('timeline-details');
+            
+            experienceData.forEach((job, index) => {
+                const navItem = document.createElement('div');
+                navItem.className = 'timeline-item p-4 mb-4 border-l-4 border-slate-300 cursor-pointer hover:bg-slate-100 transition-colors duration-300 rounded-r-lg';
+                navItem.dataset.id = job.id;
+                navItem.innerHTML = `
+                    <h3 class="font-bold text-lg text-slate-800">${job.role}</h3>
+                    <p class="text-slate-600">${job.company}</p>
+                    <p class="text-sm text-slate-500">${job.period}</p>
+                `;
+                timelineNavContainer.appendChild(navItem);
+            });
+
+            function updateTimelineDetails(jobId) {
+                const job = experienceData.find(j => j.id === jobId);
+                if (!job) return;
+
+                let detailsHtml = `
+                    <h3 class="text-2xl font-bold text-blue-700 mb-2">${job.role}</h3>
+                    <p class="text-lg font-medium text-slate-700 mb-1">${job.company}</p>
+                    <p class="text-sm text-slate-500 mb-6">${job.location} | ${job.period}</p>
+                    <ul class="space-y-3 list-disc list-inside text-slate-600">
+                        ${job.details.map(d => `<li>${d}</li>`).join('')}
+                    </ul>
+                `;
+                timelineDetailsContainer.innerHTML = detailsHtml;
+
+                document.querySelectorAll('.timeline-item').forEach(item => {
+                    item.classList.remove('timeline-item-active');
+                    if (item.dataset.id === jobId) {
+                        item.classList.add('timeline-item-active');
+                    }
+                });
+            }
+
+            timelineNavContainer.addEventListener('click', (e) => {
+                const targetItem = e.target.closest('.timeline-item');
+                if (targetItem) {
+                    updateTimelineDetails(targetItem.dataset.id);
+                }
+            });
+
+            updateTimelineDetails(experienceData[0].id);
+
+            const skillFiltersContainer = document.getElementById('skill-filters');
+            const skillCategories = Object.keys(skillsData);
+            
+            skillCategories.forEach(category => {
+                const button = document.createElement('button');
+                button.className = 'skill-filter-btn px-4 py-2 rounded-full font-semibold text-sm transition-colors duration-300';
+                button.textContent = category;
+                button.dataset.category = category;
+                skillFiltersContainer.appendChild(button);
+            });
+
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            const skillsChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Proficiency / Experience',
+                        data: [],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(59, 130, 246, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: {
+                                font: { size: 14, weight: 'bold' },
+                                color: '#334155'
+                            },
+                            ticks: {
+                                backdropColor: 'rgba(255, 255, 255, 0.75)',
+                                color: '#475569',
+                                stepSize: 2,
+                                beginAtZero: true,
+                                max: 10
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            function updateChart(category) {
+                const data = skillsData[category];
+                if (data) {
+                    skillsChart.data.labels = data.labels;
+                    skillsChart.data.datasets[0].data = data.values;
+                    skillsChart.update();
+                }
+                
+                document.querySelectorAll('.skill-filter-btn').forEach(btn => {
+                   if (btn.dataset.category === category) {
+                       btn.classList.add('bg-blue-600', 'text-white');
+                       btn.classList.remove('bg-slate-200', 'text-slate-700');
+                   } else {
+                       btn.classList.remove('bg-blue-600', 'text-white');
+                       btn.classList.add('bg-slate-200', 'text-slate-700');
+                   }
+                });
+            }
+
+            skillFiltersContainer.addEventListener('click', (e) => {
+                if (e.target.matches('.skill-filter-btn')) {
+                    updateChart(e.target.dataset.category);
+                }
+            });
+
+            updateChart(skillCategories[0]);
+            
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('nav-link-active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('nav-link-active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
